@@ -41,9 +41,36 @@ class PessoaApiRestIT {
     @Test
     void criaPessoaFisicaComSucesso() throws Exception {
         dadoUmJsonValidoDePessoaFisica();
+        savarPessoa();
         aoExcutarPostParaCriaPessoa();
         deveCadastrarUmaNovaPessoa();
         deveRetornarCreated();
+    }
+
+    @Test
+    void retornarCode409ConflictAoCadastrarPessoaExistente() throws Exception {
+        dadoUmJsonValidoDePessoaFisica();
+        existeItemCadastrado();
+        aoExcutarPostParaCriaPessoa();
+        naoDeveCadastrarUmaNovaPessoa();
+        deveRetornarConflict();
+    }
+
+    private void naoDeveCadastrarUmaNovaPessoa() {
+        verify(service, times(0)).salvar(any(Pessoa.class));
+    }
+
+    private void existeItemCadastrado() {
+        when(service.existe(any(Pessoa.class))).thenReturn(true);
+    }
+
+    private void savarPessoa() {
+        when(service.existe(any(Pessoa.class))).thenReturn(false);
+        when(service.salvar(any(Pessoa.class))).thenReturn(pessoa);
+    }
+
+    private void deveRetornarConflict() throws Exception {
+        result.andExpect(status().isConflict());
     }
 
     private void deveCadastrarUmaNovaPessoa() {
@@ -55,7 +82,6 @@ class PessoaApiRestIT {
     }
 
     private void aoExcutarPostParaCriaPessoa() throws Exception {
-        when(service.salvar(any(Pessoa.class))).thenReturn(pessoa);
         result = mockMvc.perform(post(API_V1_CADASTRO + "/pessoa")
                 .contentType("application/json")
                 .content(pessoaFisicaJson));

@@ -29,8 +29,13 @@ public class PessoaController {
     @PostMapping
     public ResponseEntity<PessoaDTO> criar(@RequestBody PessoaDTO pessoaDTO) {
         try {
-            Pessoa pessoa = service.salvar(pessoaDTO.toEntity());
+            Pessoa newPessoa = pessoaDTO.toEntity();
+            if(service.existe(newPessoa)) {
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            }
+            Pessoa pessoa = service.salvar(newPessoa);
             return new ResponseEntity<>(new PessoaDTO(pessoa), HttpStatus.CREATED);
+
         } catch (IllegalArgumentException e) {
             logger.error(e.getMessage(), e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
