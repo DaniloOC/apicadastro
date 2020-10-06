@@ -21,7 +21,7 @@ Executando projeto:
 
 Tecnologias utilizadas:
     
-    Java 8, Spring Boot, Spring MVC, Maven 3, Swagger, JUnit5
+    Java 8, Spring Boot, Spring MVC, Maven 3, Swagger, JUnit5, Database H2
     
 ## Exemplos chamadas REST:
 
