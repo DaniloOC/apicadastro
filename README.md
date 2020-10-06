@@ -23,7 +23,7 @@ Tecnologias utilizadas:
     
     Java 8, Spring Boot, Spring MVC, Maven 3, Swagger, JUnit5
     
-###### Exemplos chamadas REST:
+## Exemplos chamadas REST:
 
 Listar todas pessoas paginando:
 
