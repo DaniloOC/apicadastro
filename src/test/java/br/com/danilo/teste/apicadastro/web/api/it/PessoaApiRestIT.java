@@ -17,13 +17,14 @@ import org.springframework.test.web.servlet.ResultActions;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 class PessoaApiRestIT {
 
-    private static final String API_V1_CADASTRO = "/api/v1/cadastro";
+    private static final String API_V1_CADASTRO = "/api/v1/cadastro/pessoa";
 
     @Autowired
     private MockMvc mockMvc;
@@ -50,17 +51,56 @@ class PessoaApiRestIT {
     @Test
     void retornarCode409ConflictAoCadastrarPessoaExistente() throws Exception {
         dadoUmJsonValidoDePessoaFisica();
-        existeItemCadastrado();
+        existePessoaCadastrada();
         aoExcutarPostParaCriaPessoa();
         naoDeveCadastrarUmaNovaPessoa();
         deveRetornarConflict();
+    }
+
+    @Test
+    void atualizarPessoaComSucesso() throws Exception {
+        dadoUmJsonValidoDePessoaFisica();
+        existePessoaCadastrada();
+        atualizaPessoa();
+        aoExcutarPutParaAtualizarPessoa();
+        deveRetornarOk();
+    }
+
+    @Test
+    void retornarCode404NotFoundCasoPessoaNaoExista() throws Exception {
+        dadoUmJsonValidoDePessoaFisica();
+        naoExistePessoaCadastrada();
+        aoExcutarPutParaAtualizarPessoa();
+        deveRetornarNotFound();
+    }
+
+    private void deveRetornarNotFound() throws Exception {
+        result.andExpect(status().isNotFound());
+    }
+
+    private void naoExistePessoaCadastrada() {
+        when(service.existe(any(Pessoa.class))).thenReturn(false);
+    }
+
+    private void atualizaPessoa() {
+        when(service.atualizar(any(), any(Pessoa.class))).thenReturn(pessoa);
+    }
+
+    private void deveRetornarOk() throws Exception {
+        result.andExpect(status().isOk());
+    }
+
+    private void aoExcutarPutParaAtualizarPessoa() throws Exception {
+        result = mockMvc.perform(put(API_V1_CADASTRO + "/34037000034")
+                .contentType("application/json")
+                .content(pessoaFisicaJson));
     }
 
     private void naoDeveCadastrarUmaNovaPessoa() {
         verify(service, times(0)).salvar(any(Pessoa.class));
     }
 
-    private void existeItemCadastrado() {
+    private void existePessoaCadastrada() {
         when(service.existe(any(Pessoa.class))).thenReturn(true);
     }
 
@@ -82,7 +122,7 @@ class PessoaApiRestIT {
     }
 
     private void aoExcutarPostParaCriaPessoa() throws Exception {
-        result = mockMvc.perform(post(API_V1_CADASTRO + "/pessoa")
+        result = mockMvc.perform(post(API_V1_CADASTRO)
                 .contentType("application/json")
                 .content(pessoaFisicaJson));
     }

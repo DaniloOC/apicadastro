@@ -111,12 +111,18 @@ public class PessoaDTO implements Serializable {
     public Pessoa toEntity() {
         Pessoa pessoa = new Pessoa(getCpf(), getNome());
         pessoa.setApelido(getApelido());
-        pessoa.setEnderecos(getEnderecos().stream().map(EnderecoDTO::toEntity).collect(Collectors.toSet()));
+        if (getEnderecos() != null) {
+            pessoa.setEnderecos(getEnderecos().stream().map(EnderecoDTO::toEntity).collect(Collectors.toSet()));
+        }
         pessoa.setProfissao(getProfissao());
         pessoa.setSalario(getSalario());
-        pessoa.setDependentes(getDependentes().stream().map(DependenteDTO::toEntity).collect(Collectors.toSet()));
+        if (getDependentes() != null) {
+            pessoa.setDependentes(getDependentes().stream().map(DependenteDTO::toEntity).collect(Collectors.toSet()));
+        }
         pessoa.setDataNascimento(getDataNascimento());
-        pessoa.setTelefones(getTelefones().stream().map(TelefoneDTO::toEntity).collect(Collectors.toSet()));
+        if (getTelefones() != null) {
+            pessoa.setTelefones(getTelefones().stream().map(TelefoneDTO::toEntity).collect(Collectors.toSet()));
+        }
         return pessoa;
     }
 }
