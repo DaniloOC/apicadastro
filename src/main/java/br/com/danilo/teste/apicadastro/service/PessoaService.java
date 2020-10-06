@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.NoResultException;
 import javax.persistence.Transient;
-
 import java.util.Optional;
 
 import static java.util.Optional.ofNullable;
@@ -57,5 +56,10 @@ public class PessoaService {
     public Page<Pessoa> findAll(int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.ASC, "nome");
         return repository.findAll(pageRequest);
+    }
+
+    @Transient
+    public void delete(Pessoa pessoa) {
+        repository.deleteById(pessoa.getId());
     }
 }

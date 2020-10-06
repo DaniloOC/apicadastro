@@ -70,11 +70,20 @@ public class PessoaController {
     }
 
     @GetMapping("/{cpf}")
-    public ResponseEntity<PessoaDTO> findById(@PathVariable String cpf) {
+    public ResponseEntity<PessoaDTO> findByCpf(@PathVariable String cpf) {
         Optional<PessoaDTO> pessoaDTOOptional = service.findByCpf(cpf).map(PessoaDTO::new);
         return pessoaDTOOptional
                 .map(pessoaDTO -> new ResponseEntity<>(pessoaDTO, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
 
+    }
+
+    @DeleteMapping("/{cpf}")
+    public ResponseEntity<?> delete(@PathVariable String cpf) {
+        return service.findByCpf(cpf)
+                .map(pessoa -> {
+                    service.delete(pessoa);
+                    return new ResponseEntity<>(HttpStatus.OK);})
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }
