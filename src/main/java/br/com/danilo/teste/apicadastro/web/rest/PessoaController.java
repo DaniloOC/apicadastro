@@ -3,6 +3,7 @@ package br.com.danilo.teste.apicadastro.web.rest;
 import br.com.danilo.teste.apicadastro.models.Pessoa;
 import br.com.danilo.teste.apicadastro.service.PessoaService;
 import br.com.danilo.teste.apicadastro.web.dto.PessoaDTO;
+import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/cadastro/pessoa")
+@Api(value = "Pessoa")
 public class PessoaController {
 
     private final Logger logger = LoggerFactory.getLogger(PessoaController.class);
