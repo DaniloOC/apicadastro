@@ -1,4 +1,4 @@
-package br.com.danilo.teste.apicadastro.web.api.it;
+package br.com.danilo.teste.apicadastro.web.rest.it;
 
 import br.com.danilo.teste.apicadastro.models.Pessoa;
 import br.com.danilo.teste.apicadastro.service.PessoaService;

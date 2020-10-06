@@ -1,4 +1,4 @@
-package br.com.danilo.teste.apicadastro.web.api;
+package br.com.danilo.teste.apicadastro.web.rest;
 
 import br.com.danilo.teste.apicadastro.models.Pessoa;
 import br.com.danilo.teste.apicadastro.service.PessoaService;
@@ -6,9 +6,12 @@ import br.com.danilo.teste.apicadastro.web.dto.PessoaDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/cadastro/pessoa")
@@ -50,5 +53,28 @@ public class PessoaController {
 
         Pessoa pessoaAtualizada = service.atualizar(cpf, pessoa);
         return new ResponseEntity<>(new PessoaDTO(pessoaAtualizada), HttpStatus.OK);
+    }
+
+
+    @GetMapping
+    public Page<PessoaDTO> findAll(
+            @RequestParam(
+                    value = "page",
+                    required = false,
+                    defaultValue = "0") int page,
+            @RequestParam(
+                    value = "size",
+                    required = false,
+                    defaultValue = "10") int size) {
+        return service.findAll(page, size).map(PessoaDTO::new);
+    }
+
+    @GetMapping("/{cpf}")
+    public ResponseEntity<PessoaDTO> findById(@PathVariable String cpf) {
+        Optional<PessoaDTO> pessoaDTOOptional = service.findByCpf(cpf).map(PessoaDTO::new);
+        return pessoaDTOOptional
+                .map(pessoaDTO -> new ResponseEntity<>(pessoaDTO, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+
     }
 }

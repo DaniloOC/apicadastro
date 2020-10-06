@@ -3,10 +3,15 @@ package br.com.danilo.teste.apicadastro.service;
 import br.com.danilo.teste.apicadastro.dao.PessoaRepository;
 import br.com.danilo.teste.apicadastro.models.Pessoa;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.NoResultException;
 import javax.persistence.Transient;
+
+import java.util.Optional;
 
 import static java.util.Optional.ofNullable;
 
@@ -23,6 +28,10 @@ public class PessoaService {
     @Transient
     public Pessoa salvar(Pessoa pessoa) {
         return repository.save(pessoa);
+    }
+
+    public Optional<Pessoa> findByCpf(String cpf) {
+        return repository.findByCpf(cpf);
     }
 
     public boolean existe(Pessoa pessoa) {
@@ -43,5 +52,10 @@ public class PessoaService {
                     ofNullable(newPessoa.getTelefones()).ifPresent(pessoa::setTelefones);
                     return repository.save(pessoa);
                 }).orElseThrow(() -> new NoResultException("Pessoa não foi encontrada."));
+    }
+
+    public Page<Pessoa> findAll(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.ASC, "nome");
+        return repository.findAll(pageRequest);
     }
 }
