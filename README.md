@@ -9,8 +9,12 @@ Requisitos:
 Executando projeto:
 
     Clone o projeto: https://github.com/DaniloOC/apicadastro.git
-    Entre na pasta apicadastro e execute: mvn spring-boot:run
+
+    Entre na pasta apicadastro e execute: 
+        mvn spring-boot:run
+
     Swagger: http://localhost:8080/swagger-ui.html
+
     H2: http://localhost:8080/h2
         JDBC URL: jdbc:h2:file:./data/cadastro
         USER NAME: sa
@@ -19,7 +23,7 @@ Tecnologias utilizadas:
     
     Java 8, Spring Boot, Spring MVC, Maven 3, Swagger, JUnit5
     
-Exemplos chamadas REST:
+###### Exemplos chamadas REST:
 
 Listar todas pessoas paginando:
 
