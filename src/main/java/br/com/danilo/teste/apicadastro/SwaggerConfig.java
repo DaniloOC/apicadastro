@@ -19,7 +19,7 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
     public Docket productApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("br.com.danilo.teste.apicadastro"))
+                .apis(RequestHandlerSelectors.basePackage("br.com.danilo.teste.apicadastro.web.rest"))
                 .build()
                 .apiInfo(metaData());
 
@@ -27,11 +27,9 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
 
     private ApiInfo metaData() {
         return new ApiInfoBuilder()
-                .title("Spring Boot REST API")
-                .description("\"Spring Boot REST API\"")
+                .title("Teste Rest API")
+                .description("\"Rest API de cadastro\"")
                 .version("1.0.0")
-                .license("Apache License Version 2.0")
-                .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0\"")
                 .build();
     }
 

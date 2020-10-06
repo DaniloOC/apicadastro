@@ -4,6 +4,8 @@ import br.com.danilo.teste.apicadastro.models.Pessoa;
 import br.com.danilo.teste.apicadastro.service.PessoaService;
 import br.com.danilo.teste.apicadastro.web.dto.PessoaDTO;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,7 @@ public class PessoaController {
         this.service = service;
     }
 
+    @ApiOperation(value = "Cria uma nova pessoa")
     @PostMapping
     public ResponseEntity<PessoaDTO> criar(@RequestBody PessoaDTO pessoaDTO) {
         try {
@@ -44,6 +47,7 @@ public class PessoaController {
         }
     }
 
+    @ApiOperation(value = "Atualiza pessoa pelo cpf")
     @PutMapping("/{cpf}")
     public ResponseEntity<PessoaDTO> atualizar(@PathVariable String cpf, @RequestBody PessoaDTO pessoaDTO) {
 
@@ -57,7 +61,7 @@ public class PessoaController {
         return new ResponseEntity<>(new PessoaDTO(pessoaAtualizada), HttpStatus.OK);
     }
 
-
+    @ApiOperation(value = "Lista todas pessoas paginando.")
     @GetMapping
     public Page<PessoaDTO> findAll(
             @RequestParam(
@@ -71,6 +75,7 @@ public class PessoaController {
         return service.findAll(page, size).map(PessoaDTO::new);
     }
 
+    @ApiOperation(value = "Retorna pessoa pelo cpf")
     @GetMapping("/{cpf}")
     public ResponseEntity<PessoaDTO> findByCpf(@PathVariable String cpf) {
         Optional<PessoaDTO> pessoaDTOOptional = service.findByCpf(cpf).map(PessoaDTO::new);
@@ -80,6 +85,7 @@ public class PessoaController {
 
     }
 
+    @ApiOperation(value = "Remove uma pessoa pelo cpf")
     @DeleteMapping("/{cpf}")
     public ResponseEntity<?> delete(@PathVariable String cpf) {
         return service.findByCpf(cpf)

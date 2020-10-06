@@ -14,8 +14,10 @@ public class Dependente {
     @JoinColumn(name="pessoa_id")
     private Pessoa pessoa;
 
+    @Column(nullable = false)
     private String cpf;
 
+    @Column(nullable = false)
     private String nome;
 
     private TipoDependente tipo;

@@ -1,5 +1,6 @@
 package br.com.danilo.teste.apicadastro.web.dto;
 
+import br.com.danilo.teste.apicadastro.models.Dependente;
 import br.com.danilo.teste.apicadastro.models.Pessoa;
 
 import java.io.Serializable;
@@ -7,6 +8,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PessoaDTO implements Serializable {
 
@@ -117,7 +119,15 @@ public class PessoaDTO implements Serializable {
         pessoa.setProfissao(getProfissao());
         pessoa.setSalario(getSalario());
         if (getDependentes() != null) {
-            pessoa.setDependentes(getDependentes().stream().map(DependenteDTO::toEntity).collect(Collectors.toSet()));
+            Set<Dependente> dependentes = getDependentes()
+                    .stream()
+                    .map(dto -> {
+                        Dependente dpt = dto.toEntity();
+                        dpt.setPessoa(pessoa);
+                        return dpt;
+                    })
+                    .collect(Collectors.toSet());
+            pessoa.setDependentes(dependentes);
         }
         pessoa.setDataNascimento(getDataNascimento());
         if (getTelefones() != null) {
